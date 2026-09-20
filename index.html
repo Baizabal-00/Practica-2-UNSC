@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNSC // LOGISTICS & REQUISITION TERMINAL</title>
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Fuentes estilo táctico Halo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --unsc-bg: #090c0f;
+            --unsc-panel: #10161b;
+            --unsc-panel-border: #1e333d;
+            --unsc-cyan: #38d9d4;
+            --unsc-cyan-dim: rgba(56, 217, 212, 0.15);
+            --unsc-amber: #fca311;
+            --unsc-olive: #3b4d3c;
+            --unsc-text-dim: #7f95a6;
+            --unsc-text-bright: #dce7ee;
+        }
+
+        body {
+            background-color: var(--unsc-bg);
+            color: var(--unsc-text-bright);
+            font-family: 'Share Tech Mono', monospace;
+            background-image: 
+                linear-gradient(rgba(16, 22, 27, 0.95), rgba(9, 12, 15, 0.97)),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(56, 217, 212, 0.02) 2px, rgba(56, 217, 212, 0.02) 4px);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6, .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Barra lateral estilo cubierta de fragata UNSC */
+        .sidebar {
+            background-color: #0c1116;
+            border-right: 2px solid var(--unsc-panel-border);
+            min-height: 100vh;
+        }
+
+        .unsc-badge {
+            border-left: 4px solid var(--unsc-cyan);
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            color: var(--unsc-text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-left: 3px solid transparent;
+            border-radius: 0;
+            padding: 10px 14px;
+            margin-bottom: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--unsc-cyan);
+            background: var(--unsc-cyan-dim);
+            border-left-color: var(--unsc-cyan);
+        }
+
+        .nav-link.active {
+            color: var(--unsc-cyan);
+            background: linear-gradient(90deg, rgba(56, 217, 212, 0.15) 0%, transparent 100%);
+            border-left-color: var(--unsc-cyan);
+        }
+
+        /* Tarjetas estilo chasis de titanio UNSC */
+        .unsc-card {
+            background-color: var(--unsc-panel);
+            border: 1px solid var(--unsc-panel-border);
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+        }
+
+        .unsc-card::before {
+            content: "UNSC-REQ-SEC // CLASSIFIED";
+            position: absolute;
+            top: 4px;
+            right: 18px;
+            font-size: 0.65rem;
+            color: var(--unsc-text-dim);
+            letter-spacing: 1px;
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            background: #15222b;
+            border: 1px solid var(--unsc-cyan);
+            color: var(--unsc-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(56, 217, 212, 0.2);
+        }
+
+        .form-label {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: var(--unsc-cyan);
+            font-weight: 700;
+        }
+
+        .form-control, .form-select {
+            background-color: #070a0d !important;
+            border: 1px solid #233b47 !important;
+            color: #dce7ee !important;
+            border-radius: 0;
+            font-size: 0.95rem;
+            padding: 8px 12px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--unsc-cyan) !important;
+            box-shadow: 0 0 8px rgba(56, 217, 212, 0.4) !important;
+        }
+
+        .form-control::placeholder {
+            color: #495e6d;
+        }
+
+        /* Botones estilo mando táctico */
+        .btn-unsc-primary {
+            background: transparent;
+            color: var(--unsc-cyan);
+            border: 2px solid var(--unsc-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 0;
+            position: relative;
+            padding: 10px 24px;
+            transition: all 0.2s;
+        }
+
+        .btn-unsc-primary:hover {
+            background: var(--unsc-cyan);
+            color: #090c0f;
+            box-shadow: 0 0 15px rgba(56, 217, 212, 0.5);
+        }
+
+        .btn-unsc-secondary {
+            background: transparent;
+            color: var(--unsc-text-dim);
+            border: 1px solid #2a3e49;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            border-radius: 0;
+            padding: 10px 20px;
+        }
+
+        .btn-unsc-secondary:hover {
+            background: #142129;
+            color: #fff;
+        }
+
+        /* Tabla de historial */
+        .table-unsc {
+            color: var(--unsc-text-bright);
+            border-color: var(--unsc-panel-border);
+        }
+
+        .table-unsc thead {
+            background-color: #0c141a;
+            color: var(--unsc-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            border-bottom: 2px solid var(--unsc-cyan);
+        }
+
+        .table-unsc tbody tr {
+            background-color: rgba(16, 22, 27, 0.6);
+            border-bottom: 1px solid #16242c;
+        }
+
+        .table-unsc tbody tr:hover {
+            background-color: rgba(56, 217, 212, 0.05);
+        }
+
+        .subtotal-val {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--unsc-amber);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(252, 163, 17, 0.3);
+        }
+
+        .status-pill {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border: 1px solid var(--unsc-cyan);
+            color: var(--unsc-cyan);
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-md-3 col-lg-2 sidebar p-3 d-flex flex-column justify-content-between">
+            <div>
+                <div class="unsc-badge mb-4">
+                    <h5 class="brand-title text-white mb-0">UNSC LOGISTICS</h5>
+                    <small style="color: var(--unsc-amber); font-size: 0.7rem;">DEFENSE MATERIAL COMMAND</small>
+                </div>
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#"><i class="bi bi-cpu me-2"></i> REQUISICIÓN</a>
+                    <a class="nav-link" href="#seccionHistorial"><i class="bi bi-clock-history me-2"></i> MANIFIESTO DE ORDENES</a>
+                    <a class="nav-link" href="#"><i class="bi bi-shield-check me-2"></i> PROVEEDORES MILITARES</a>
+                </nav>
+            </div>
+            <div class="pt-3 border-top border-secondary-subtle">
+                <span class="status-pill mb-3 d-block text-center">ENLACE TÁCTICO SEGURO</span>
+                <a class="nav-link text-danger p-0" href="#"><i class="bi bi-power me-2"></i> CERRAR TERMINAL</a>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="col-md-9 col-lg-10 p-4">
+            <!-- Header Táctico -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+                <div>
+                    <h4 class="mb-0 text-white">FORMULARIO DE REQUISICIÓN DE SUMINISTROS</h4>
+                    <small class="text-muted">DIRECTIVA LOGÍSTICA DE FLOTA // AUTORIZACIÓN NIVEL 3</small>
+                </div>
+                <div class="d-flex align-items-center gap-3 mt-2 mt-md-0">
+                    <span class="text-muted small">GRID REF: EPSILON ERIDANI</span>
+                    <i class="bi bi-broadcast text-info"></i>
+                    <div class="rounded-0 bg-dark border border-info text-info px-2 py-1 small fw-bold">UNSC-SPARTAN-SYS</div>
+                </div>
+            </div>
+
+            <form id="formOrden">
+                <!-- 1. Datos del Proveedor / Contratista Militar -->
+                <div class="unsc-card p-4 mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="icon-box"><i class="bi bi-building-fill-gear"></i></div>
+                        <div>
+                            <h6 class="mb-0 text-white">CONTRATISTA / PROVEEDOR MILITAR</h6>
+                            <small class="text-muted">Entidad autorizada por el Comando de Suministros</small>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">CONTRATISTA MILITAR</label>
+                            <select class="form-select" name="proveedor" required>
+                                <option value="" selected disabled>Seleccionar contratista oficial...</option>
+                                <option value="Misriah Armaments">Misriah Armaments</option>
+                                <option value="Acheron Security">Acheron Security</option>
+                                <option value="Materials Group UNSC">Materials Group UNSC</option>
+                                <option value="Sinoviet Heavy Machinery">Sinoviet Heavy Machinery</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">OFICIAL / REPRESENTANTE DE CONTACTO</label>
+                            <input type="text" class="form-control" name="punto_contacto" placeholder="Ej: Cap. Thomas Lasky" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">FRECUENCIA COM / ENLACE DIGITAL</label>
+                            <input type="email" class="form-control" name="correo" placeholder="requisitions@misriah.unsc.mil" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">IDENTIFICADOR DE COMUNICACIONES TÁCTICAS</label>
+                            <input type="text" class="form-control" name="telefono" placeholder="+UNSC-COM-992-001" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Detalle del Equipo / Munición / Producto -->
+                <div class="unsc-card p-4 mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="icon-box"><i class="bi bi-box-fill"></i></div>
+                        <div>
+                            <h6 class="mb-0 text-white">ESPECIFICACIÓN DE CARGA / SUMINISTRO</h6>
+                            <small class="text-muted">Información técnica y costo asignado por crédito c-bill</small>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">DESCRIPCIÓN DEL EQUIPO</label>
+                            <input type="text" class="form-control" name="nombre_producto" placeholder="Ej: Rifle de Asalto MA40 Individual Combat" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">CÓDIGO DE MATRIZ / SKU</label>
+                            <input type="text" class="form-control" name="sku" placeholder="UNSC-ARM-4091-B" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">CANTIDAD</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" value="1" min="1" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">COSTO UNITARIO (CRÉDITOS cR)</label>
+                            <input type="number" step="0.01" class="form-control" id="precio_unitario" name="precio_unitario" placeholder="0.00" required>
+                        </div>
+                        <div class="col-md-8 d-flex align-items-center pt-2">
+                            <div>
+                                <label class="form-label d-block mb-0">TOTAL ESTIMADO EN RECURSOS</label>
+                                <span class="subtotal-val" id="lblSubtotal">cR 0.00</span>
+                                <span class="text-muted ms-2 small">[SUJETO A APROBACIÓN PRESUPUESTARIA DE FLOTA]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Logística y Despliegue -->
+                <div class="unsc-card p-4 mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="icon-box"><i class="bi bi-rocket-takeoff"></i></div>
+                        <div>
+                            <h6 class="mb-0 text-white">PLAN DE DESPLIEGUE Y VECTOR DE ENTREGA</h6>
+                            <small class="text-muted">Coordenadas de atraque y prioridad operativa</small>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">FECHA MÁXIMA DE ENTREGA</label>
+                            <input type="date" class="form-control" name="fecha_entrega" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">PRIORIDAD DE ENVÍO TÁCTICO</label>
+                            <select class="form-select" name="prioridad_envio" required>
+                                <option value="Sub-Orbital Estándar (D-5)">Sub-Orbital Estándar (D-5)</option>
+                                <option value="Cápsula de Despliegue Rápido SOEIV (Prioridad Alpha)">Cápsula de Despliegue Rápido SOEIV (Prioridad Alpha)</option>
+                                <option value="Salto Espacio Deslizante Prioritario (Emergencia)">Salto Espacio Deslizante Prioritario (Emergencia)</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">BAHÍA DE CARGA / BASE DE ATRAQUE / COORDENADAS</label>
+                            <textarea class="form-control" name="direccion_entrega" rows="2" placeholder="Fragata UNSC Infinity, Bahía Hangar 04, Estación Orbital El Cairo" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="d-flex justify-content-end gap-3 mb-5">
+                    <button type="reset" class="btn btn-unsc-secondary">CANCELAR / REINICIAR</button>
+                    <button type="submit" class="btn btn-unsc-primary"><i class="bi bi-send-check me-2"></i>AUTORIZAR Y REGISTRAR ORDEN</button>
+                </div>
+            </form>
+
+            <!-- Historial táctico / Eliminar -->
+            <div class="unsc-card p-4" id="seccionHistorial">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 text-white"><i class="bi bi-hdd-network me-2 text-info"></i>REGISTRO CENTRAL DE REQUISICIONES</h5>
+                    <small class="text-muted">BASE DE DATOS ACTIVA</small>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-unsc align-middle">
+                        <thead>
+                            <tr>
+                                <th># ID</th>
+                                <th>CONTRATISTA</th>
+                                <th>EQUIPO / SKU</th>
+                                <th>CANT.</th>
+                                <th>COSTO CR</th>
+                                <th>FECHA DESPLIEGUE</th>
+                                <th>COMANDO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaOrdenesBody">
+                            <!-- Inyección vía jQuery -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Cálculo reactivo del subtotal
+    function calcularSubtotal() {
+        const cant = parseFloat($('#cantidad').val()) || 0;
+        const precio = parseFloat($('#precio_unitario').val()) || 0;
+        const total = cant * precio;
+        $('#lblSubtotal').text('cR ' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    }
+    $('#cantidad, #precio_unitario').on('input', calcularSubtotal);
+
+    // Listar pedidos de la DB
+    function cargarOrdenes() {
+        $.getJSON('api.php?action=listar', function(res) {
+            if (res.status === 'success') {
+                let rows = '';
+                res.data.forEach(item => {
+                    rows += `
+                        <tr>
+                            <td class="text-info">#${item.id}</td>
+                            <td>${item.proveedor}</td>
+                            <td><strong class="text-white">${item.nombre_producto}</strong> <span class="text-muted">(${item.sku})</span></td>
+                            <td>${item.cantidad}</td>
+                            <td style="color: var(--unsc-amber);">cR ${parseFloat(item.subtotal).toFixed(2)}</td>
+                            <td>${item.fecha_entrega}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${item.id}" style="border-radius:0;">
+                                    <i class="bi bi-x-octagon"></i> REVOCAR
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $('#tablaOrdenesBody').html(rows || '<tr><td colspan="7" class="text-center text-muted py-3">NO SE REGISTRAN MANIFIESTOS ACTIVOS EN LA RED DE LA UNSC</td></tr>');
+            }
+        });
+    }
+    cargarOrdenes();
+
+    // Crear pedido
+    $('#formOrden').on('submit', function(e) {
+        e.preventDefault();
+        $.post('api.php?action=crear', $(this).serialize(), function(res) {
+            if (res.status === 'success') {
+                alert('// TRANSMISIÓN COMPLETADA // Solicitud de material transferida al manifiesto de la UNSC.');
+                $('#formOrden')[0].reset();
+                $('#lblSubtotal').text('cR 0.00');
+                cargarOrdenes();
+            } else {
+                alert('// ERROR EN LA TRANSMISIÓN // Fallo de comunicación con el nodo de base de datos.');
+            }
+        }, 'json');
+    });
+
+    // Eliminar pedido
+    $(document).on('click', '.btn-eliminar', function() {
+        const id = $(this).data('id');
+        if (confirm(`// ALERTA DE PURGA // ¿Deseas revocar y eliminar la orden de requisición #${id}?`)) {
+            $.post('api.php?action=eliminar', { id: id }, function(res) {
+                if (res.status === 'success') {
+                    cargarOrdenes();
+                } else {
+                    alert('// ERROR // No fue posible purgar el registro.');
+                }
+            }, 'json');
+        }
+    });
+});
+</script>
+</body>
+</html>
